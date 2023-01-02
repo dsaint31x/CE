@@ -4,8 +4,9 @@
 
 <h1>My first SVG</h1>
 
-<svg width="100" height="100">
-  <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <circle id="c" cx="200" cy="200" r="10" fill="red" />
+  <animate xlink:href="test_svg.html#c" attributeName="r" from="10" to="200" dur="5s" repeatCount="indefinite"/>
 </svg>
 
 </body>

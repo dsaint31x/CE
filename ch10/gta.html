@@ -1,0 +1,152 @@
+ <html>
+   <head>
+     <!-- include jQuery -->
+     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"> </script>
+
+     <title>Web Page Skeleton</title>
+
+     <style>
+       <!-- CSS goes here -->
+       invisible {
+	       display:none; /* elements with this class are not displayed */
+       }
+     </style>
+
+     <script type="text/javascript">
+
+       <!-- JavaScript goes here -->
+       var node; // current position in tree of knowledge
+      
+       // Append the supplied html to the dialog. Bail if the new node has
+       // no children because there is no question to ask. Otherwise, make
+       // the new node the current node and ask a question using the string
+       // attribute of the node. Turn the animal name into a question if a
+       // leaf node. Returns true if the new node is a leaf node.
+      
+       function
+       question(new_node, html)
+       {
+          $('#dialog').append(html);     // add the html to the dialog
+      
+          if ($(new_node).length == 0) { // no question if no children
+            return (true);
+          }
+          else {
+            node = new_node;             // descend to new node
+      
+            if ($(node).children().length == 0)
+              $('#dialog').append('Is it a ' + $(node).attr('string') + '?');
+            else
+              $('#dialog').append($(node).attr('string') + '?');
+      
+            return (false);
+          }
+       }
+      
+       // Restarts the game. Hides all buttons and text fields, clears
+       // the text fields, sets the initial node and greeting, asks the
+       // first question, displays the yes/no buttons.
+      
+       function
+       restart()
+       {
+          $('.start-hidden').hide();
+          $('#question,#what').val('');
+          question($('#root>div'), '<div><b>Think of an animal.</b></div>');
+          $('#yesno').show();
+       }
+
+       $(function() {
+         <!-- JavaScript to run when document ready -->
+         restart(); // Sets everything up the first time through.
+
+         // The user has entered a new question. Make a node with that
+         // question and put the old no-node into it. Then, make a node
+         // with the new animal and put it into the new question node ahead
+         // of the old no-node so that it becomes the yes choice. Start over.
+        
+         $('#done-question').click(function() {
+           $(node).wrap('<div string="' + $('#question').val() + '"></div>');
+           $(node).parent().prepend('<div string="' + $(what).val() + '"></div>');
+           $('#dialog').append("<div>Thanks! I'll remember that.</div><p>");
+           restart();
+         });
+        
+         // The user has entered a new animal name and clicked done. Hide
+         // those items and make the new-question text field and done button
+         // visible. Plug the old and new animal names into the query.
+        
+         $('#done-what').click(function() {
+            $('#what-is-it').hide();
+            $('#new').text($('#what').val());
+            $('#old').text($(node).attr('string'));
+            $('#new-question').show();
+            $('#dialog div:last').append(' <i>' + $('#what').val() + '</i>');
+         });
+        
+         // The user clicked yes in answer to a question. Descend the tree
+         // unless we hit bottom in which case we boast and start over.
+        
+         $('#yes').click(function() {
+            if (question($(node).children(':first-child'), ' <i>yes</i><br>')) {
+              $('#dialog').append("<div>I knew it! I'm so smart!</div><p>");
+              restart();
+            }
+         });
+        
+         // The user clicked no in answer to a question. Descend the tree
+         // unless we hit bottom, in which case we hide the yes/no buttons
+         // and make the what-is-it text field and done button visible.
+        
+         $('#no').click(function() {
+            if (question($(node).children(':last-child'), ' <i>no</i><br>')) {
+              $('#yesno').hide();
+              $('#dialog').append('<div>I give up. What is it?</div>');
+              $('#what-is-it').show();
+            }
+         });
+       });
+
+     </script>
+   </head>
+
+   <body>
+     <!-- HTML goes here -->
+ <!-- This is the knowledge tree that is never visible -->
+
+ <div id="root" class="invisible">
+   <div string="Does it bark">
+     <div string="dog"></div>
+     <div string="cat"></div>
+  </div>
+ </div>
+
+ <div id="dialog">
+   <!-- The conversation will go here -->
+ </div>
+
+ <!-- Get new animal name dialog -->
+
+ <div id="what-is-it" class="start-hidden">
+   <input id="what" type="text"/>
+   <button id="done-what">Done</button>
+ </div>
+
+ <!-- Get new animal question dialog -->
+
+ <div id="new-question" class="start-hidden">
+   What's a good question that I could use to tell a
+   <span id="new"></span> from a <span id="old"></span>?
+   <input id="question" type="text"/>
+   <button id="done-question">Done</button>
+ </div>
+
+ <!-- Yes and no buttons -->
+
+ <div id="yesno" class="start-hidden">
+   <button id="yes">Yes</button>
+   <button id="no">No</buttion>
+ </div>
+
+   </body>
+ </html>

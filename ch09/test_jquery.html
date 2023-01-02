@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>
+      My First Web Page
+    </title>
+    <style>
+      body {
+        color:      blue;
+      }
+      big {
+        color:      yellow;
+        font-size:  200%;
+      }
+    </style>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"> </script>
+    <script>
+      $(function() {
+        $('big').css('background', 'green');
+      });
+    </script>
+  </head>
+  <body>
+    This is my first web page.
+      <b>
+        <big>Cool!</big>
+      </b>
+    <script>
+      $('big').click(function() {
+          $('big').before('<i>Very</i>');
+          $('big').css('font-size', '500%');
+      });
+    </script>
+  </body>
+</html>
